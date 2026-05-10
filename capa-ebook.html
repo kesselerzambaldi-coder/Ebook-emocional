@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capa — Código do Silêncio Magnético</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0e4ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .book-wrap {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* CAPA DO LIVRO — proporção A5 */
+  .book {
+    width: 380px;
+    height: 540px;
+    position: relative;
+    box-shadow:
+      -6px 6px 0px #b8769a,
+      -12px 12px 0px #9a5a80,
+      0 30px 60px rgba(150,60,100,0.3);
+    border-radius: 2px 8px 8px 2px;
+    flex-shrink: 0;
+  }
+
+  /* LOMBADA */
+  .book::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, #9a5a80 0%, #7a3a60 100%);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px 8px 8px 2px;
+    overflow: hidden;
+    position: relative;
+    background: #fdf0f5;
+  }
+
+  /* FUNDO COM PÉTALAS SVG */
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* FAIXA SUPERIOR */
+  .cover-top-band {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #a33560, #c2476e, #e8789a, #c2476e, #a33560);
+  }
+
+  /* FAIXA INFERIOR */
+  .cover-bottom-band {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #a33560, #c2476e, #e8789a, #c2476e, #a33560);
+  }
+
+  /* CONTEÚDO */
+  .cover-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 28px 24px;
+    text-align: center;
+  }
+
+  .cover-author-top {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #a33560;
+  }
+
+  .cover-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+  }
+
+  .cover-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #c2476e;
+    margin-bottom: 14px;
+    border-top: 1px solid rgba(194,71,110,0.3);
+    border-bottom: 1px solid rgba(194,71,110,0.3);
+    padding: 5px 16px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: #3a1428;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: #c2476e;
+    display: block;
+  }
+
+  .cover-ornament {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cover-ornament-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,71,110,0.4));
+    max-width: 60px;
+  }
+
+  .cover-ornament-line.right {
+    background: linear-gradient(90deg, rgba(194,71,110,0.4), transparent);
+  }
+
+  .cover-ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: #c2476e;
+    transform: rotate(45deg);
+    opacity: 0.7;
+  }
+
+  .cover-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: #7a3a55;
+    line-height: 1.5;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  /* ILUSTRAÇÃO CENTRAL — silhueta feminina abstrata */
+  .cover-illustration {
+    width: 120px;
+    height: 140px;
+    margin: 16px auto 0;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .cover-bottom {
+    width: 100%;
+    text-align: center;
+  }
+
+  .cover-author-bottom {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+    color: #7a3a55;
+    letter-spacing: 0.05em;
+  }
+
+  .cover-author-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a33560;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  /* MOCKUP 3D — versão digital */
+  .mockup-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .mockup-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a33560;
+    font-weight: 500;
+  }
+
+  /* TABLET MOCKUP */
+  .tablet-frame {
+    width: 260px;
+    height: 360px;
+    background: #2a1020;
+    border-radius: 16px;
+    padding: 18px 14px;
+    box-shadow:
+      0 2px 0 #1a0810,
+      0 20px 50px rgba(150,60,100,0.4);
+    position: relative;
+  }
+
+  .tablet-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fdf0f5;
+    position: relative;
+  }
+
+  .tablet-home-btn {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 4px;
+    background: #4a2030;
+    border-radius: 2px;
+  }
+
+  .tablet-camera {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #4a2030;
+    border-radius: 50%;
+  }
+
+  /* MINI CAPA DENTRO DO TABLET */
+  .mini-cover {
+    width: 100%;
+    height: 100%;
+    background: #fdf0f5;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px 10px;
+    text-align: center;
+  }
+
+  .mini-band-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #a33560, #c2476e, #e8789a);
+  }
+
+  .mini-band-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #a33560, #c2476e, #e8789a);
+  }
+
+  .mini-eyebrow {
+    font-size: 6px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c2476e;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  .mini-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #3a1428;
+    line-height: 1.1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .mini-title em {
+    font-style: italic;
+    color: #c2476e;
+    font-size: 16px;
+  }
+
+  .mini-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7px;
+    font-style: italic;
+    color: #7a3a55;
+    line-height: 1.4;
+    padding: 0 4px;
+  }
+
+  .mini-author {
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a33560;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  /* BOTÃO DE DOWNLOAD */
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #a33560, #c2476e);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .download-btn:hover { opacity: 0.88; }
+</style>
+</head>
+<body>
+
+<div class="book-wrap">
+
+  <!-- CAPA FÍSICA -->
+  <div>
+    <div class="book">
+      <div class="cover">
+
+        <!-- FUNDO SVG COM PÉTALAS E PADRÃO -->
+        <svg class="cover-bg" viewBox="0 0 380 540" xmlns="http://www.w3.org/2000/svg">
+          <!-- Fundo base -->
+          <rect width="380" height="540" fill="#fdf0f5"/>
+
+          <!-- Círculos decorativos de fundo -->
+          <circle cx="340" cy="80" r="120" fill="#f8dde9" opacity="0.5"/>
+          <circle cx="40" cy="420" r="100" fill="#f8dde9" opacity="0.4"/>
+          <circle cx="190" cy="270" r="180" fill="#fce8f0" opacity="0.3"/>
+
+          <!-- Pétalas decorativas — canto superior direito -->
+          <ellipse cx="340" cy="60" rx="28" ry="14" fill="#e8a0b8" opacity="0.25" transform="rotate(-30 340 60)"/>
+          <ellipse cx="360" cy="90" rx="24" ry="11" fill="#c2476e" opacity="0.15" transform="rotate(20 360 90)"/>
+          <ellipse cx="320" cy="40" rx="20" ry="9" fill="#e8789a" opacity="0.2" transform="rotate(-60 320 40)"/>
+          <ellipse cx="355" cy="120" rx="18" ry="8" fill="#d4678a" opacity="0.18" transform="rotate(45 355 120)"/>
+          <ellipse cx="300" cy="70" rx="16" ry="7" fill="#c2476e" opacity="0.12" transform="rotate(10 300 70)"/>
+
+          <!-- Pétalas — canto inferior esquerdo -->
+          <ellipse cx="40" cy="470" rx="28" ry="14" fill="#e8a0b8" opacity="0.25" transform="rotate(30 40 470)"/>
+          <ellipse cx="20" cy="500" rx="22" ry="10" fill="#c2476e" opacity="0.15" transform="rotate(-20 20 500)"/>
+          <ellipse cx="70" cy="490" rx="18" ry="8" fill="#e8789a" opacity="0.2" transform="rotate(60 70 490)"/>
+          <ellipse cx="25" cy="450" rx="16" ry="7" fill="#d4678a" opacity="0.18" transform="rotate(-45 25 450)"/>
+
+          <!-- Linhas decorativas sutis -->
+          <line x1="28" y1="28" x2="352" y2="28" stroke="#c2476e" stroke-width="0.5" opacity="0.2"/>
+          <line x1="28" y1="512" x2="352" y2="512" stroke="#c2476e" stroke-width="0.5" opacity="0.2"/>
+
+          <!-- Pontos ornamentais -->
+          <circle cx="28" cy="28" r="3" fill="#c2476e" opacity="0.3"/>
+          <circle cx="352" cy="28" r="3" fill="#c2476e" opacity="0.3"/>
+          <circle cx="28" cy="512" r="3" fill="#c2476e" opacity="0.3"/>
+          <circle cx="352" cy="512" r="3" fill="#c2476e" opacity="0.3"/>
+
+          <!-- Silhueta feminina abstrata — centro -->
+          <g opacity="0.08">
+            <!-- Corpo -->
+            <ellipse cx="190" cy="310" rx="38" ry="70" fill="#c2476e"/>
+            <!-- Cabeça -->
+            <circle cx="190" cy="218" r="28" fill="#c2476e"/>
+            <!-- Cabelo fluindo -->
+            <path d="M162 210 Q140 240 148 280 Q156 260 162 240 Z" fill="#c2476e"/>
+            <path d="M218 210 Q240 240 232 280 Q224 260 218 240 Z" fill="#c2476e"/>
+            <path d="M165 208 Q150 180 162 162 Q172 155 190 158" fill="#c2476e"/>
+            <path d="M215 208 Q230 180 218 162 Q208 155 190 158" fill="#c2476e"/>
+          </g>
+
+          <!-- Ornamento central floral -->
+          <g transform="translate(190, 268)" opacity="0.15">
+            <circle cx="0" cy="0" r="4" fill="#c2476e"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(0)"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(60)"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(120)"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(180)"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(240)"/>
+            <ellipse cx="0" cy="-14" rx="4" ry="7" fill="#c2476e" transform="rotate(300)"/>
+          </g>
+        </svg>
+
+        <!-- FAIXAS -->
+        <div class="cover-top-band"></div>
+        <div class="cover-bottom-band"></div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="cover-content">
+
+          <div class="cover-author-top">Clara Martins</div>
+
+          <div class="cover-main">
+            <div class="cover-eyebrow">Método Exclusivo</div>
+
+            <div class="cover-title">
+              Código do<br>
+              <em>Silêncio</em><br>
+              Magnético
+            </div>
+
+            <div class="cover-ornament">
+              <div class="cover-ornament-line"></div>
+              <div class="cover-ornament-diamond"></div>
+              <div class="cover-ornament-diamond" style="opacity:0.4; width:4px; height:4px;"></div>
+              <div class="cover-ornament-diamond"></div>
+              <div class="cover-ornament-line right"></div>
+            </div>
+
+            <div class="cover-subtitle">
+              O método de 3 camadas que faz ele sentir sua falta — sem você dizer uma palavra
+            </div>
+          </div>
+
+          <div class="cover-bottom">
+            <div class="cover-author-bottom">por</div>
+            <div class="cover-author-name">Clara Martins</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:14px; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#a33560; font-weight:500;">Capa física / impressa</p>
+  </div>
+
+  <!-- MOCKUP TABLET -->
+  <div class="mockup-wrap">
+    <div class="tablet-frame">
+      <div class="tablet-camera"></div>
+      <div class="tablet-screen">
+        <div class="mini-cover">
+          <div class="mini-band-top"></div>
+
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07" viewBox="0 0 232 324" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="50" r="80" fill="#c2476e"/>
+            <circle cx="30" cy="260" r="70" fill="#c2476e"/>
+          </svg>
+
+          <div class="mini-eyebrow">Método Exclusivo</div>
+
+          <div class="mini-title">
+            Código do<br>
+            <em>Silêncio</em><br>
+            Magnético
+          </div>
+
+          <div class="mini-subtitle">
+            O método de 3 camadas que faz ele sentir sua falta — sem você dizer uma palavra
+          </div>
+
+          <div class="mini-author">Clara Martins</div>
+          <div class="mini-band-bottom"></div>
+        </div>
+      </div>
+      <div class="tablet-home-btn"></div>
+    </div>
+    <p style="text-align:center; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#a33560; font-weight:500;">Versão digital / ebook</p>
+  </div>
+
+</div>
+
+</body>
+</html>
