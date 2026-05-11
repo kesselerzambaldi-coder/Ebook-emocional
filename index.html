@@ -22,6 +22,78 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1467211128421093&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+
+<!-- Meta Conversions API -->
+<script>
+  // Token de Acesso da Conversions API
+  const META_PIXEL_ID = '1467211128421093';
+  const META_ACCESS_TOKEN = 'EAAUyZC77F6IMBRR2ogNrpLT2i41ys5VN5vFk7SLHb4Gamk8ZBvlBisce4hSbabB7FZA0CtJUY9BTYz13St8Lp9VoWQpsRloFp1MZCELn1t5a1g7jWZAgaWQzw1EoSzpYVlQWQfBOwaPKqg5e8vZCZAKdITbtmrxth8tBynlHmZA4WsVEav7OVWn0efxjLVzGD8P3ZAwZDZD';
+
+  // Função para enviar eventos para a Conversions API
+  async function sendMetaEvent(eventName, eventData = {}) {
+    const payload = {
+      data: [{
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_source_url: window.location.href,
+        action_source: 'website',
+        user_data: {
+          client_user_agent: navigator.userAgent,
+          fbc: getCookie('_fbc'),
+          fbp: getCookie('_fbp'),
+        },
+        ...eventData
+      }],
+      access_token: META_ACCESS_TOKEN
+    };
+
+    try {
+      await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch(e) {
+      console.error('Meta CAPI error:', e);
+    }
+  }
+
+  // Função auxiliar para ler cookies
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  // Disparar PageView via Conversions API quando a página carrega
+  window.addEventListener('load', function() {
+    sendMetaEvent('PageView');
+  });
+
+  // Disparar ViewContent quando rolar 50% da página
+  let viewContentFired = false;
+  window.addEventListener('scroll', function() {
+    if (!viewContentFired) {
+      const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      if (scrolled >= 50) {
+        viewContentFired = true;
+        fbq('track', 'ViewContent');
+        sendMetaEvent('ViewContent');
+      }
+    }
+  });
+
+  // Disparar InitiateCheckout quando clicar em qualquer botão de compra
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('a[href*="kiwify"]');
+    if (btn) {
+      fbq('track', 'InitiateCheckout');
+      sendMetaEvent('InitiateCheckout');
+    }
+  });
+</script>
+<!-- End Meta Conversions API -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
